@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hello World!</title>
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .dashboard {
+        display: flex;
+        height: 100%;
+      }
+
+      #fundbox-app-wrapper {
+        border: 1px solid gray;
+        padding: 10px;
+        margin: 25px;
+        width: 90%;
+        height: 100vh;
+        overflow: auto;
+      }
+    </style>
+
+    <script>
+      (function (id) {
+        function importScript(src, onLoad) {
+          const script = document.createElement("script");
+          script.id = id;
+          script.type = "text/javascript";
+          script.onerror = function (e) {
+            throw new URIError(
+              "The script " + e.target.src + " is not accessible."
+            );
+          };
+          if (onLoad) script.onload = onLoad;
+          document.currentScript.parentNode.insertBefore(
+            script,
+            document.currentScript
+          );
+          script.src = src;
+        }
+
+        importScript(
+          "https://app.fundbox.com/static/dist/fuse/v1/fuse.js"
+        );
+      })("fuse-script");
+
+      function onFuseAPIReady() {
+        window.FbxFuseClient = new FbxFuse("OC3SS66W8X", {
+          // window.FbxFuseClient = new FbxFuse("8AUIV1VD8U", {
+          container: document.querySelector("#fundbox-app-wrapper"),
+          events: {
+            onStateReady: function (e) {
+              console.log("Fundbox State Ready", e);
+            },
+            onStateChange: function (e) {
+              console.log("Fundbox State Changed", e);
+            },
+          },
+        });
+      }
+
+      function openFundbox() {
+        if (!window.FbxFuseClient) {
+          console.error("Fundbox client not initialized yet.");
+          return;
+        }
+
+        window.FbxFuseClient.open({ partnerUserId: "nav-45140116" });
+      }
+
+      setTimeout(openFundbox, 1000);
+    </script>
+  </head>
+  <body>
+    <div class="dashboard">
+      <div
+        id="fundbox-app-wrapper"
+        data-fundbox-domain="app-alexlfundbox-rde.fbx.im"
+        data-fundbox-auth-token="auth_token"
+      ></div>
+    </div>
+  </body>
+</html>
